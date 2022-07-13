@@ -1,4 +1,23 @@
 const Encore = require('@symfony/webpack-encore');
+const path = require('path');
+const webpack = require('webpack');
+
+const options = {
+    transformAssetUrls: {
+        video: ['src', 'poster'],
+        source: 'src',
+        img: 'src',
+        image: 'xlink:href',
+        'b-avatar': 'src',
+        'b-img': 'src',
+        'b-img-lazy': ['src', 'blank-src'],
+        'b-card': 'img-src',
+        'b-card-img': 'src',
+        'b-card-img-lazy': ['src', 'blank-src'],
+        'b-carousel-slide': 'img-src',
+        'b-embed': 'src'
+    }
+}
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -7,6 +26,17 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
+    .addPlugin(
+        new webpack.ProvidePlugin({
+            "window.Quill": "quill/dist/quill.js",
+            Quill: "quill/dist/quill.js"
+        })
+    )
+    .configureDevServerOptions(options=>{
+        options.https={
+            pfx: path.join(process.env.HOMEPATH, '.symfony/certs/default.p12'),
+        };
+    })
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
@@ -21,6 +51,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('vue','./assets/vue/index.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -31,6 +62,14 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
+
+    .addAliases({
+        '@images': path.resolve(__dirname, 'assets','images'),
+        '@vue':path.resolve(__dirname,'assets','vue'),
+        '@js':path.resolve(__dirname,'assets','js'),
+        '@styles':path.resolve(__dirname,'assets','styles'),
+        '@fonts':path.resolve(__dirname,'assets','fonts'),
+    })
 
     /*
      * FEATURE CONFIG
@@ -56,7 +95,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -68,6 +107,9 @@ Encore
     // requires WebpackEncoreBundle 1.4 or higher
     //.enableIntegrityHashes(Encore.isProduction())
 
+    .enableVueLoader(() => {
+        return options;
+    }, { runtimeCompilerBuild: true })
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 ;

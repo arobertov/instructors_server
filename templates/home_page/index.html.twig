@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Депо Земляне{% endblock %}
+
+{% block body %}
+        <div id="vue-entry"></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.user = {{ user|raw }}
+    </script>
+    {{ parent() }}
+{% endblock %}

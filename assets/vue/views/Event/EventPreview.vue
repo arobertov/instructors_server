@@ -26,15 +26,8 @@ export default {
     event(){
       return this.$store.getters["EventModule/getItem"]
     },
-    user() {
-      return this.$siteUser === null ? this.$store.getters["UserModule/getUser"] : this.$siteUser;
-    },
     isOwner(){
-      if(typeof this.event ==='object' && this.event.hasOwnProperty('owner')){
-
-        return this.event.owner.alias === this.user.alias
-      }
-      return false;
+      return this.$store.getters["EventModule/isOwner"];
     },
   },
   watch: {

@@ -7,6 +7,14 @@ import ListEvents from "../components/ListEventsComponent";
 import HMIMessages from "../components/HMIMessagesComponent";
 import EventPreview from "../views/Event/EventPreview";
 
+/*
+const router = new VueRouter();
+router.beforeEach((to, from, next)=>{
+
+})
+ */
+
+
 export default new VueRouter({
     mode:'history',
     routes: [
@@ -15,6 +23,7 @@ export default new VueRouter({
             name: "site_index",
             component: IndexView,
             meta:{
+                requiresAuth: false,
                 item:[{text:'Начало',to:{name:'site_index'}}]
             }
         },
@@ -27,6 +36,7 @@ export default new VueRouter({
                     name: "site_events",
                     component:ListEvents,
                     meta:{
+                        requiresAuth: true,
                         item:[
                             {text:'Начало',to:{name:'site_index'}},
                             {text:'Събития',to:{name:'site_events'}}
@@ -38,6 +48,7 @@ export default new VueRouter({
                     name:"site_events_create",
                     component: EventCreate,
                     meta:{
+                        requiresAuth: true,
                         item:[
                             {text:'Начало',to:{name:'site_index'}},
                             {text:'Събития',to:{name:'site_events'}},
@@ -50,6 +61,7 @@ export default new VueRouter({
                     name:"site_event_preview",
                     component: EventPreview,
                     meta:{
+                        requiresAuth: true,
                         item:[
                             {text:'Начало',to:{name:'site_index'}},
                             {text:'Събития',to:{name:'site_events'}},
@@ -64,6 +76,7 @@ export default new VueRouter({
             name:"categories_list",
             component: CategoriesList,
             meta:{
+                requiresAuth: true,
                 item:[
                     {text:'Начало',to:{name:'site_index'}},
                     {text:'Категории',to:{name:'categories_list'}}
@@ -75,6 +88,7 @@ export default new VueRouter({
             name:"hmi_messages",
             component:HMIMessages,
             meta:{
+                requiresAuth: true,
                 item:[
                     {text:'Начало',to:{name:'site_index'}},
                     {text:'Съобщения HMI',to:{name:'hmi_messages'}}

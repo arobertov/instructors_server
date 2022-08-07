@@ -33,7 +33,6 @@ export default {
         getError: state => state.error,
         isError: state => state.error !== null,
         hasEvents: state => state.events.length > 0,
-        isOwner: state => state.event.owner.alias === window.user.alias
     },
     mutations: {
         updateField,
@@ -91,6 +90,18 @@ export default {
                 }
                 return "Сърврът върна неочакван отговор!";
             } catch (e) {
+                commit('hasError', true);
+                commit('setError', e);
+                return e;
+            }
+        },
+        async deleteEvent({commit},id){
+            try {
+                const response = await eventApi.deleteEvent(id);
+                console.log(response.status)
+                return response.data;
+
+            }catch (e) {
                 commit('hasError', true);
                 commit('setError', e);
                 return e;

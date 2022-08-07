@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="event-creation" v-if="event.owner">
-      <p v-if="isOwner" id="owner-options"><a href="#">Редактирай! </a> | <a href="#">Изтрий!</a></p>
+      <p v-if="checkAbility" id="owner-options"><a href="#">Редактирай! </a> | <a href="#">Изтрий!</a></p>
       <p id="date-user-data">написано от: {{event.owner.alias}} | дата: {{ event.dateEdited | formatDate }}</p>
     </div>
     <div style="clear: both"></div>
@@ -26,8 +26,19 @@ export default {
     event(){
       return this.$store.getters["EventModule/getItem"]
     },
-    isOwner(){
-      return this.$store.getters["EventModule/isOwner"];
+    checkAbility(){
+      const user = this.$store.getters["UserModule/getUser"];
+      const event = this.$store.getters["EventModule/getItem"];
+      if( user === null || !user.hasOwnProperty('alias')){
+        return false;
+      }
+      if( user.hasOwnProperty('roles') && Array.isArray(user.roles)){
+        if(user.roles.includes('ROLE_SUPER_ADMIN') || user.roles.includes('ROLE_ADMIN')) return true;
+      }
+      if(event !== null && event.hasOwnProperty('owner')){
+        return user.alias === event.owner.alias;
+      }
+      return false;
     },
   },
   watch: {

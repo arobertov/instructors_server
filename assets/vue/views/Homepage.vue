@@ -45,7 +45,7 @@ export default {
     '$route'(){
       this.items = this.$route.meta.item;
     }
-  }
+  },
 }
 </script>
 

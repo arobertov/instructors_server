@@ -66,7 +66,11 @@
         @filtered="onFiltered"
     >
       <template v-slot:cell(title)="data">
-        <router-link :to="{name:'site_event_preview',params:{id:data.item.id}}">{{data.item.title}}</router-link>
+        <router-link :to="{name:'site_event_preview',params:{id:data.item.id}}">{{data.item.title}}</router-link><br>
+        <b-button-group  v-if="checkAbility(data.item)">
+          <b-button variant="outline-warning">Редактирай</b-button>
+          <b-button variant="outline-danger" @click="deleteMsgBox(data.item)">Изтрий</b-button>
+        </b-button-group>
       </template>
       <template v-slot:cell(trainFaults)="data">
         <ul>
@@ -105,6 +109,9 @@ export default {
     }
   },
   computed:{
+    user() {
+      return this.$store.getters["UserModule/getUser"];
+    },
     items(){
       return this.$store.getters["EventModule/getItems"]["hydra:member"]
     },
@@ -156,15 +163,58 @@ export default {
     },
   },
   methods:{
+    checkAbility(event){
+      const user = this.user;
+      //$store.getters["UserModule/getUser"];
+      //const event = this.$store.getters["EventModule/getItem"];
+      if( user === null || !user.hasOwnProperty('alias')){
+        return false;
+      }
+      if( user.hasOwnProperty('roles') && Array.isArray(user.roles)){
+        if(user.roles.includes('ROLE_SUPER_ADMIN') || user.roles.includes('ROLE_ADMIN')) return true;
+      }
+      if(event !== null && event.hasOwnProperty('owner')){
+        return user.alias === event.owner.alias;
+      }
+      return false;
+    },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalItems = filteredItems.length
       this.currentPage = 1
-    }
+    },
+    async deleteEvent(id) {
+      const result = await this.$store.dispatch("EventModule/deleteEvent",id);
+      console.log(result)
+    },
+    deleteMsgBox(event){
+      this.$bvModal.msgBoxConfirm('Потвърдете че желаете да изтриете '+ event.title +'!', {
+        title: 'МОЛЯ ПОТВЪРДЕТЕ',
+        okVariant: 'danger',
+        okTitle: 'ДА',
+        cancelTitle: 'НЕ',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+          .then(value => {
+            this.deleteEvent(event.id);
+          })
+          .catch(err => {
+            console.log(err)
+          })
+    },
   }
 }
 </script>
 
 <style scoped>
-
+.btn{
+  padding: 0.1rem 0.7rem;
+  font-size: 0.75rem;
+}
+.btn-outline-warning{
+  color: #333336;
+  border-color: #333336;
+}
 </style>

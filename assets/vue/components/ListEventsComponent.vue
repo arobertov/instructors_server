@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="totalItems>0">
     <b-row>
       <b-col lg="6">
         <b-form-group
@@ -92,7 +92,10 @@
           aria-controls="events"
       ></b-pagination>
     </div>
-
+  </div>
+  <div v-else>
+    <h3>Няма нито едно публикувано събитие!</h3>
+    <h5>Бъди първия който ще публикува ---> <b-button variant="success" :to="{name:'site_events_create'}">Публикувай!</b-button></h5>
   </div>
 </template>
 
@@ -188,7 +191,7 @@ export default {
       console.log(result)
     },
     deleteMsgBox(event){
-      this.$bvModal.msgBoxConfirm('Потвърдете че желаете да изтриете '+ event.title +'!', {
+      this.$bvModal.msgBoxConfirm('Потвърдете че желаете да изтриете събитието: -  '+ event.title +'!', {
         title: 'МОЛЯ ПОТВЪРДЕТЕ',
         okVariant: 'danger',
         okTitle: 'ДА',
@@ -198,7 +201,7 @@ export default {
         centered: true
       })
           .then(value => {
-            this.deleteEvent(event.id);
+            if(value) this.deleteEvent(event.id);
           })
           .catch(err => {
             console.log(err)

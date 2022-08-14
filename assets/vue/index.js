@@ -4,6 +4,7 @@ import Common from '@vue/common-index';
 import router from '@vue/router/main-router';
 import store from "@vue/store/index";
 
+
 Common.vueCommonSets();
 
 Vue.prototype.$siteUser = window.user;
@@ -24,5 +25,5 @@ new Vue({
   components:{Homepage},
   template:"<Homepage/>",
   router,
-  store
+  store,
 }).$mount('#vue-entry');

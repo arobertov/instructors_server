@@ -7,7 +7,6 @@ import VuePaginate from 'vue-paginate';
 import moment from 'moment';
 import VueBreadcrumbs from 'vue-breadcrumbs';
 import VueRouter from "vue-router";
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 

@@ -5,6 +5,8 @@ import CategoryModule from "./category";
 import EventModule from "./event";
 import TrainModule from "./train";
 import TrainFaults from "./trainFaults";
+import ImageModule from "@vue/store/image";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -14,5 +16,6 @@ export default new Vuex.Store({
         CategoryModule:CategoryModule,
         TrainModule:TrainModule,
         TrainFaults:TrainFaults,
+        ImageModule:ImageModule
     }
 });

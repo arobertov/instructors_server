@@ -17,7 +17,8 @@ class TrainEventListener
         $this->security = $security;
     }
 
-    public function prePersist(Event $event){
+    public function prePersist(Event $event): void
+    {
         if($this->security->getUser()){
             $event->setOwner($this->security->getUser());
         }

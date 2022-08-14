@@ -52,6 +52,12 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('vue','./assets/vue/index.js')
+    .copyFiles({
+        from: './assets/images',
+        pattern: /\.(png|jpg|jpeg)$/,
+        // to path is relative to the build directory
+        to: 'images/[path][name].[ext]'
+    })
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

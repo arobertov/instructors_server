@@ -9,6 +9,7 @@
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <title-input v-model="title" placeholder="Въведете заглавие с дължина минимум от 3 символа"/>
           <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
+          <file-input/>
           <b-form-group
               label="Номер на влак:"
               label-for="_train-select"
@@ -36,11 +37,13 @@ import TitleInput from "../../components/form-components/TitleInputComponent";
 import ContentInput from "../../components/form-components/ContentInputComponent";
 import CategorySelect from "../../components/form-components/CategorySelectComponent";
 import TrainFault from "../../components/form-components/TrainFaultSelectComponent";
-import loginFormComponent from "../../components/security-component/LoginFormComponent";
+import FileInput from "../../components/vue-image-manager/FileInputComponent";
+
+
 export default {
   name: "EventCreateView",
   components:{
-    TitleInput, ContentInput,CategorySelect,TrainFault
+    TitleInput, ContentInput,CategorySelect,TrainFault,FileInput
   },
   mounted() {
     this.$store.commit("EventModule/creatingEvent");

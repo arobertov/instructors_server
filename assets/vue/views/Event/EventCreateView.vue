@@ -9,7 +9,7 @@
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <title-input v-model="title" placeholder="Въведете заглавие с дължина минимум от 3 символа"/>
           <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
-          <file-input/>
+          <file-input v-model="images"/>
           <b-form-group
               label="Номер на влак:"
               label-for="_train-select"
@@ -20,6 +20,7 @@
           </b-form-group>
           <category-select v-model="category"/>
           <train-fault v-model="trainFaults"/>
+          <ImageManager />
           <b-form-row>
             <div class="m-4">
               <b-button :disabled="invalid" type="submit" variant="success" id="submit-btn">Публикувай</b-button>
@@ -37,13 +38,13 @@ import TitleInput from "../../components/form-components/TitleInputComponent";
 import ContentInput from "../../components/form-components/ContentInputComponent";
 import CategorySelect from "../../components/form-components/CategorySelectComponent";
 import TrainFault from "../../components/form-components/TrainFaultSelectComponent";
-import FileInput from "../../components/vue-image-manager/FileInputComponent";
+import ImageManager from "@vue/components/form-components/ImageManagerComponent";
 
 
 export default {
   name: "EventCreateView",
   components:{
-    TitleInput, ContentInput,CategorySelect,TrainFault,FileInput
+    TitleInput, ContentInput,CategorySelect,TrainFault,ImageManager
   },
   mounted() {
     this.$store.commit("EventModule/creatingEvent");

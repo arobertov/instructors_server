@@ -54,6 +54,7 @@ export default {
         createEventSuccess: (state, item) => state.events["hydra:member"].unshift(item),
         setError: (state, error) => state.error = error,
         setCategory: (state, category) => state.event.category = category,
+        attachImages:(state,images)=>state.event.images = images,
         setTrainFaults: (state, trainFaults) => state.event.trainFaults = trainFaults,
         hasError: (state, isError) => state.isError = isError,
     },

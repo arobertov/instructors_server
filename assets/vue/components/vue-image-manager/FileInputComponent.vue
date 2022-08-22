@@ -6,7 +6,7 @@
       <div class="preview" v-else>
         <div>
           <div class="image">
-            <img :src="require(`@images/${value[0].filePath}`).default" alt="Image" height="150px">
+            <img :src="require(`@images/${value[0].filePath}`)" alt="Image" height="150px">
           </div>
         </div>
       </div>

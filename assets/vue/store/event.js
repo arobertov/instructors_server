@@ -1,5 +1,5 @@
 import {getField, updateField} from 'vuex-map-fields';
-import eventApi from "../api/event-api";
+import eventApi from "@vue/api/event-api";
 
 const initializeEvent = {
     title: '',
@@ -29,6 +29,7 @@ export default {
     getters: {
         getField,
         getItem: state => state.event,
+        getImages:state=>state.event.images,
         getItems: state => state.events,
         getError: state => state.error,
         isError: state => state.error !== null,

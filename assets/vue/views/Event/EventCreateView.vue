@@ -9,7 +9,7 @@
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <title-input v-model="title" placeholder="Въведете заглавие с дължина минимум от 3 символа"/>
           <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
-          <file-input v-model="images"/>
+          <image-manager v-model="images"/>
           <b-form-group
               label="Номер на влак:"
               label-for="_train-select"
@@ -20,7 +20,6 @@
           </b-form-group>
           <category-select v-model="category"/>
           <train-fault v-model="trainFaults"/>
-          <ImageManager />
           <b-form-row>
             <div class="m-4">
               <b-button :disabled="invalid" type="submit" variant="success" id="submit-btn">Публикувай</b-button>
@@ -61,6 +60,14 @@ export default {
     events(){
       return this.$store.getters["EventModule/getItems"]["hydra:member"];
     },
+    images:{
+      get(){
+        return this.$store.getters["EventModule/getImages"]
+      },
+      set(images){
+        return this.$store.commit("EventModule/attachImages",this.mappingImages(images))
+      }
+    },
     isError(){
         return this.$store.getters["EventModule/isError"]
      },
@@ -84,10 +91,15 @@ export default {
         'event.content',
         'event.category',
         'event.train',
-        'event.trainFaults'
+        'event.trainFaults',
     ])
   },
   methods:{
+    mappingImages(images){
+        const mi = images.map(i=>i["@id"]);
+        console.log('oooo')
+        return mi;
+    },
     onSubmit(){
       this.$refs.publicationForm.validate().then(success => {
         if (success) {

@@ -27,7 +27,7 @@ export default {
   computed:{
     images:{
       get:function (){
-        return this.$store.getters["ImageModule/getImages"];
+        return this.$store.getters["EventModule/getImages"];
       },
       set:function (images){
         this.$store.commit("EventModule/attachImages",images);

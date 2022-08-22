@@ -5,7 +5,9 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 import './styles/global.scss'
+import './styles/image-manager.scss'
 import './styles/app.css'
+
 
 
 import $ from 'jquery';

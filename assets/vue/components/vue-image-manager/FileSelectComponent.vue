@@ -75,7 +75,7 @@
                   />
                   <label :for="`file_${i}`">
                     <figure class="preview">
-                      <img :src="require(`@images/${file.filePath}`).default" :alt="file.filePath">
+                      <img :src="require(`@images/${file.filePath}`)" :alt="file.filePath">
                     </figure>
                     <span class="name" :title="file.id">
 

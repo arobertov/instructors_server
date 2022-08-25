@@ -65,7 +65,7 @@ export default {
             state.isError = false;
             state.error = '';
             state.isSuccess = true;
-            state.successMessage = 'Изображението е качено на сайта!';
+            state.successMessage = 'Файлът е качен!';
         },
         deletingImageSuccess(state,image){
             state.isSuccess = true;

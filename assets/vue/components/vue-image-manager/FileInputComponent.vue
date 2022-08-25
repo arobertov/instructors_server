@@ -2,7 +2,7 @@
   <div>
     <a href="#" class="btn btn-warning float-right btn-sm" @click.prevent="clearFiles" v-if="value.length>0">изчисти</a>
     <div class="input-field" @click="show_modal = true">
-      <div class="helper" v-if="value.length === 0">КЛИКНЕТЕ ЗА ИЗБОР НА ИЗОБРАЖЕНИЕ</div>
+      <div class="helper" v-if="value.length === 0">ИЗБОР НА ИЗОБРАЖЕНИЕ</div>
       <div class="preview" v-else>
         <div>
           <div class="image">
@@ -20,11 +20,12 @@
     >
       <template #header><h4>Избери изображение</h4></template>
     </file-select>
+    <b-button block variant="primary"><b-icon-upload></b-icon-upload>Качи файл</b-button>
   </div>
 </template>
 
 <script>
-import FileSelect from '../../components/vue-image-manager/FileSelectComponent'
+import FileSelect from '@vue/components/vue-image-manager/FileSelectComponent'
 
 export default {
   name:'FileInput',

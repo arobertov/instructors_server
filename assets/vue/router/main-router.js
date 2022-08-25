@@ -7,13 +7,6 @@ import ListEvents from "../components/ListEventsComponent";
 import HMIMessages from "../components/HMIMessagesComponent";
 import EventPreview from "../views/Event/EventPreview";
 
-/*
-const router = new VueRouter();
-router.beforeEach((to, from, next)=>{
-
-})
- */
-
 
 export default new VueRouter({
     mode:'history',

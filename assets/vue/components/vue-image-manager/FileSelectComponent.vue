@@ -23,7 +23,8 @@
                   </li>
                   <li class="float-right">
                     <a href="#" class="btn btn-primary btn-sm" @click.prevent="selectFiles">
-                      <b-icon-upload></b-icon-upload> Добави
+                      <b-icon-upload></b-icon-upload>
+                      Качи файл
                     </a>
                     <input
                         type="file"

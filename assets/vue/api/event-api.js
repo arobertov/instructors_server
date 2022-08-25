@@ -11,7 +11,7 @@ export default {
         return axios.put(`/api/events/${event.id}`,{
             title: event.title,
             content: event.content,
-            images: event.images,
+            images: event.images.map(i=>i["@id"]),
             train: event.train,
             category: event.category,
             tags: event.tags,
@@ -24,7 +24,7 @@ export default {
             {
                 title: event.title,
                 content: event.content,
-                images: event.images,
+                images: event.images.map(i=>i["@id"]),
                 train: event.train,
                 category: event.category,
                 tags: event.tags,

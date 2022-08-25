@@ -44,6 +44,7 @@ export default {
             state.message = message;
         },
         [USER_LOGIN](state,responseData){
+            window.user = responseData
             state.user = responseData;
             state.isLogin = true;
             state.isError = false;

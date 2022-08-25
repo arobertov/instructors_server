@@ -11,7 +11,7 @@ Vue.prototype.$siteUser = window.user;
 
 router.beforeEach((to, from, next)=> {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if(!store.getters["UserModule/getIsLogin"]){
+    if(window.user == null){
       next({name: 'site_index'});
     }
     else{

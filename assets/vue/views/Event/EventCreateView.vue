@@ -9,7 +9,7 @@
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <title-input v-model="title" placeholder="Въведете заглавие с дължина минимум от 3 символа"/>
           <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
-          <image-manager v-model="images"/>
+          <image-manager/>
           <b-form-group
               label="Номер на влак:"
               label-for="_train-select"
@@ -60,14 +60,6 @@ export default {
     events(){
       return this.$store.getters["EventModule/getItems"]["hydra:member"];
     },
-    images:{
-      get(){
-        return this.$store.getters["EventModule/getImages"]
-      },
-      set(images){
-        return this.$store.commit("EventModule/attachImages",this.mappingImages(images))
-      }
-    },
     isError(){
         return this.$store.getters["EventModule/isError"]
      },
@@ -95,11 +87,6 @@ export default {
     ])
   },
   methods:{
-    mappingImages(images){
-        const mi = images.map(i=>i["@id"]);
-        console.log('oooo')
-        return mi;
-    },
     onSubmit(){
       this.$refs.publicationForm.validate().then(success => {
         if (success) {

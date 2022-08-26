@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use App\Controller\ImageController;
 
 /**
+ * @Vich\Uploadable()
  * @ApiResource(
  *     normalizationContext={"groups"={"image:read"}},
  *     denormalizationContext={"groups"={"image:write"}},
@@ -49,7 +50,6 @@ use App\Controller\ImageController;
  * )
  * @ORM\Table(name="images")
  * @ORM\Entity(repositoryClass=ImageRepository::class)
- * @Vich\Uploadable()
  */
 class Image
 {
@@ -66,8 +66,8 @@ class Image
     public ?string $contentUrl;
 
     /**
-     *@Vich\UploadableField(mapping="image", fileNameProperty="filePath")
-     *@var File|null
+     * @Vich\UploadableField(mapping="image", fileNameProperty="filePath")
+     * @var File|null
      */
     public ?File $fileImage = null;
 

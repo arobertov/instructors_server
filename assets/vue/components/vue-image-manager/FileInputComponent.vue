@@ -12,6 +12,7 @@
       </div>
     </div>
     <file-select
+        ref="file_select"
         :showModal="show_modal"
         @close="show_modal = false"
         @selected="selectFiles"
@@ -20,7 +21,7 @@
     >
       <template #header><h4>Избери изображение</h4></template>
     </file-select>
-    <b-button block variant="primary"><b-icon-upload></b-icon-upload>Качи файл</b-button>
+
   </div>
 </template>
 
@@ -57,7 +58,6 @@ export default {
       this.$emit('input', files);
       this.show_modal = false;
     },
-
     clearFiles() {
       this.$emit('input', []);
     }

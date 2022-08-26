@@ -71,7 +71,7 @@ export default {
             state.isSuccess = true;
             state.isLoading = false;
             state.successMessage = 'Изображението е изтрито!';
-            state.images = state.images.filter(i=>i!==image)
+            state.images = state.images.filter(i=>i["@id"]!==image)
         },
         setError(state,error){
             state.isLoading = false;
@@ -115,8 +115,8 @@ export default {
         async delete({commit},imageIri){
             try{
                 const response = await commonApi.deleteImage(imageIri);
-                commit('deletingImageSuccess',response.data)
-                console.log(response.data)
+                commit('deletingImageSuccess',imageIri)
+                console.log(response.status)
             }catch (e) {
                 let error = e.response.data;
                 if(error.hasOwnProperty('hydra:description')){

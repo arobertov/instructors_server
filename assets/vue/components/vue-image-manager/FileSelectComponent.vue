@@ -1,111 +1,96 @@
 <template>
-  <div>
-    <div class="my-modal" id="file-select">
-      <transition name="modal" v-if="showModal">
-        <div class="modal-mask">
-          <div class="modal-wrapper" @click="close">
-            <div class="modal-container">
-              <a href="#" class="modal-close" @click.prevent="$emit('close')">
-                <b-icon-x></b-icon-x>
+  <div class="file-select-wrapper">
+    <Modal
+      :show-modal="showModal"
+      @close="$emit('close')"
+    >
+      <template #body>
+        <div class="navigation">
+          <ul>
+            <li>
+              <a href="#" class="btn btn-primary btn-sm">
+                <b-icon-caret-left></b-icon-caret-left> Назад
               </a>
-              <div class="modal-header">
-                <slot name="header"></slot>
+            </li>
+            <li>
+              <a href="#" ><b-icon-house></b-icon-house> /</a>
+            </li>
+            <li class="float-right">
+              <a href="#" class="btn btn-primary btn-sm" @click.prevent="clickUploadInput">
+                <b-icon-upload></b-icon-upload>
+                Качи файл
+              </a>
+            </li>
+            <li class="float-right" style="margin-right: 1rem;">
+              <a
+                  href="#"
+                  class="btn btn-primary btn-sm"
+                  @click.prevent="show_add_folder = !show_add_folder"
+              >
+                <b-icon-folder2></b-icon-folder2> Папка
+              </a>
+              <div class="add-folder" v-if="show_add_folder">
+                <input type="text" placeholder="Name" v-model="new_folder"/>
+                <button class="btn btn-primary btn-sm" >save</button>
               </div>
-              <div class="modal-body">
-                <div class="navigation">
-                  <ul>
-                    <li>
-                      <a href="#" class="btn btn-primary btn-sm">
-                        <b-icon-caret-left></b-icon-caret-left> Назад
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" ><b-icon-house></b-icon-house> /</a>
-                    </li>
-                    <li class="float-right">
-                      <a href="#" class="btn btn-primary btn-sm" ref="upload-btn" @click.prevent="clickUplBtn">
-                        <b-icon-upload></b-icon-upload>
-                        Качи файл
-                      </a>
-                    </li>
-                    <li class="float-right" style="margin-right: 1rem;">
-                      <a
-                          href="#"
-                          class="btn btn-primary btn-sm"
-                          @click.prevent="show_add_folder = !show_add_folder"
-                      >
-                        <b-icon-folder2></b-icon-folder2> Папка
-                      </a>
-                      <div class="add-folder" v-if="show_add_folder">
-                        <input type="text" placeholder="Name" v-model="new_folder"/>
-                        <button class="btn btn-primary btn-sm" >save</button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="alert-manager">
-                  <b-alert v-if="isError" show dismissible variant="danger"><a href="#" class="alert-link">{{error}}</a></b-alert>
-                  <b-alert v-if="isSuccess" :show="5" dismissible fade variant="success"><a href="#" class="alert-link">{{successMessage}}</a></b-alert>
-                </div>
-                <div class="loading" v-if="isLoading">
-                  <b-spinner variant="primary" label="Spinning"></b-spinner>
-                </div>
-                <div class="images" v-else>
-                  <div class="image" v-for="(dir, i) in dirs" :key="`folder_${i}`">
-                    <a href="#" >
+            </li>
+          </ul>
+        </div>
+        <AlertManager :alert-message="alertMessage"></AlertManager>
+        <div class="loading" v-if="isLoading">
+          <b-spinner variant="primary" label="Spinning"></b-spinner>
+        </div>
+        <div class="images" v-else>
+          <div class="image" v-for="(dir, i) in dirs" :key="`folder_${i}`">
+            <a href="#" >
                     <span class="preview">
                       <i class="fa fa-folder-o"></i>
                     </span>
-                      <span class="name">{{ dir }}</span>
-                    </a>
-                  </div>
-                  <!-------- select image grid  ---------------->
-                  <div class="image" v-for="(file, i) in files" :key="`file_${i}`">
-                    <input
-                        type="radio"
-                        :id="`file_${i}`"
-                        :value="[file]"
-                        v-model="selected_files"
-                        style="display: none;"
-                    />
-                    <label :for="`file_${i}`">
-                      <figure class="preview" v-if="getImagePath(file)!==null">
-                        <img :src="getImagePath(file)" :alt="file.filePath">
-                      </figure>
-                      <span class="name" :title="file.id">
-
+              <span class="name">{{ dir }}</span>
+            </a>
+          </div>
+          <!-------- select image grid  ---------------->
+          <div class="image" v-for="(file, i) in files" :key="`file_${i}`">
+            <input
+                type="radio"
+                :id="`file_${i}`"
+                :value="[file]"
+                v-model="selected_files"
+                style="display: none;"
+            />
+            <label :for="`file_${i}`">
+              <figure class="preview">
+                <img :src="require(`@images/${file.filePath}`)" :alt="file.filePath">
+              </figure>
+              <span class="name" :title="file.id">
                       <a  href="#" class="delete-image" @click="deleteImage(file['@id'])">
                         <b-icon-trash  variant="danger"></b-icon-trash>
                       </a>
                     </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <b-button
-                    variant="info"
-                    size="sm"
-                    @click.prevent="$emit('close')">
-                  <b-icon-x-circle></b-icon-x-circle> Затвори
-                </b-button>
-                <slot name="checkButton">
-                  <b-button
-                      variant="success"
-                      size="sm"
-                      :disabled="selected_files.length===0"
-                      @click.prevent="$emit('selected', selected_files)"
-                  >
-                    <b-icon-check2></b-icon-check2> Избор
-                  </b-button>
-                </slot>
-              </div>
-            </div>
+            </label>
           </div>
         </div>
-      </transition>
-    </div>
-    <!------------ ************* ----------->
+      </template>
+      <template #footer>
+        <b-button
+            variant="info"
+            size="sm"
+            @click.prevent="$emit('close')">
+          <b-icon-x-circle></b-icon-x-circle> Затвори
+        </b-button>
+        <slot name="checkButton">
+          <b-button
+              variant="success"
+              size="sm"
+              :disabled="selected_files.length===0"
+              @click.prevent="$emit('selected', selected_files)"
+          >
+            <b-icon-check2></b-icon-check2> Избор
+          </b-button>
+        </slot>
+      </template>
+    </Modal>
+
     <input
         type="file"
         style="display: none"
@@ -113,21 +98,23 @@
         @input="uploadFiles"
         id="file_uploads_selector"
     />
-    <!------------ ************* ----------->
-    <a href="#" class="btn btn-primary btn-block" @click.prevent="clickUplBtn"><b-icon-upload></b-icon-upload>Качи файл</a>
+    <b-button block variant="primary" @click.prevent="clickUploadInput">
+      <b-icon-upload></b-icon-upload>Качи файл
+    </b-button>
   </div>
-
 </template>
 
 <script>
+import Modal from "@vue/components/ModalComponent";
+import AlertManager from "@vue/components/common-component/AlertManagerComponent";
 export default {
   name:"FileSelect",
+  components:{ Modal, AlertManager },
   mounted() {
     if (this.$store.getters["ImageModule/getImages"].length < 1) {
       this.$store.dispatch("ImageModule/findAllImages");
     }
   },
-
   data() {
     return {
       dirs: [],
@@ -138,6 +125,15 @@ export default {
     };
   },
   props: {
+    alertMessage:{
+      type:Object
+    },
+    clearSelectedFile:{
+      type: Array,
+      default(){
+        return [];
+      }
+    },
     showModal: {
       type: Boolean,
       default() {
@@ -169,44 +165,24 @@ export default {
     isLoading() {
       return this.$store.getters["ImageModule/getIsLoading"];
     },
-    isError(){
-      return this.$store.getters["ImageModule/getIsError"];
-    },
-    error(){
-      return this.$store.getters["ImageModule/getError"];
-    },
-    isSuccess(){
-      return this.$store.getters["ImageModule/getIsSuccess"];
-    },
-    successMessage(){
-      return this.$store.getters["ImageModule/getSuccessMessage"];
-    },
   },
 
   methods: {
-    getImagePath(file){
-      try{
-        return  require(`@images/${file.filePath}`);
-      }catch (e) {
-        return null;
-      }
-    },
-
-    close(e) {
-      if (e.target.className === 'modal-wrapper') {
-        this.$emit('close');
-      }
-    },
-
-    clickUplBtn(){
+    clickUploadInput() {
       this.$refs.upload_files.click()
     },
 
     async uploadFiles() {
-      let formData = new FormData();
-      let data = this.$refs.upload_files.files[0];
-      formData.append('fileImage', data);
-      await this.$store.dispatch("ImageModule/uploadImage", formData);
+      try{
+        let formData = new FormData();
+        let data = this.$refs.upload_files.files[0];
+        formData.append('fileImage', data);
+        let result = await this.$store.dispatch("ImageModule/uploadImage", formData);
+        this.selected_files.push(result)
+        this.$emit('selected',this.selected_files);
+      }catch (e) {
+        console.log(e)
+      }
     },
 
     async deleteImage(imageIri){
@@ -239,9 +215,9 @@ export default {
      */
   },
   watch: {
-    show_modal(newval, oldval) {
-      if (newval) {
-        this.fetch();
+    clearSelectedFile(newval,oldval){
+      if(newval){
+        this.selected_files = [];
       }
     },
   },

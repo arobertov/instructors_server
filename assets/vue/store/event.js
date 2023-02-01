@@ -25,6 +25,8 @@ export default {
         events: [],
         error: null,
         isError: false,
+        isSuccess:false,
+        successMessage:null,
     },
     getters: {
         getField,
@@ -52,12 +54,24 @@ export default {
         },
         setItem: (state, item) => state.event = item,
         setItems: (state, items) => state.events = items,
-        createEventSuccess: (state, item) => state.events["hydra:member"].unshift(item),
+        createEventSuccess: (state, item) => {
+            state.events["hydra:member"].unshift(item);
+            state.events["hydra:totalItems"] += 1;
+        },
         setError: (state, error) => state.error = error,
         setCategory: (state, category) => state.event.category = category,
         attachImages:(state,images)=>state.event.images = images,
         setTrainFaults: (state, trainFaults) => state.event.trainFaults = trainFaults,
         hasError: (state, isError) => state.isError = isError,
+        deleting:(state)=>{state.isError=false;state.error='';state.isSuccess=false;state.successMessage=''},
+        deletingSuccess:(state,eventID)=>{
+            state.events["hydra:member"] = state.events["hydra:member"].filter(e=>e.id!==eventID);
+            state.events["hydra:totalItems"] -= 1;
+            state.isError=false;;
+            state.error='';
+            state.isSuccess=true;
+            state.successMessage='Събитието бе успешно изтрито!';
+        }
     },
     actions: {
         async findEvents({commit}) {
@@ -99,7 +113,9 @@ export default {
         },
         async deleteEvent({commit},id){
             try {
+                commit('deleting')
                 const response = await eventApi.deleteEvent(id);
+                commit('deletingSuccess',id)
                 console.log(response.status)
                 return response.data;
 

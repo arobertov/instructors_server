@@ -101,7 +101,7 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("TrainFaults/findTrains")
+    this.$store.dispatch("TrainFaults/findTrainFaults")
   },
   computed:{
     items(){

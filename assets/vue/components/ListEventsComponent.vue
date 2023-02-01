@@ -68,7 +68,7 @@
       <template v-slot:cell(title)="data">
         <router-link :to="{name:'site_event_preview',params:{id:data.item.id}}">{{data.item.title}}</router-link><br>
         <b-button-group  v-if="checkAbility(data.item)">
-          <b-button variant="outline-warning">Редактирай</b-button>
+          <b-button :to="{name:'site_edit_preview',params:{id:data.item.id}}" variant="outline-warning">Редактирай</b-button>
           <b-button variant="outline-danger" @click="deleteMsgBox(data.item)">Изтрий</b-button>
         </b-button-group>
       </template>

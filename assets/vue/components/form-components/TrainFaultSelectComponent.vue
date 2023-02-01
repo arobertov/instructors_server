@@ -40,7 +40,7 @@ export default {
   name: "TrainFaultSelectComponent",
   props: ['value'],
   mounted() {
-    this.$store.dispatch("TrainFaults/findTrains")
+    this.$store.dispatch("TrainFaults/findTrainFaults")
   },
   computed: {
     isSelectedTrainFaults(){

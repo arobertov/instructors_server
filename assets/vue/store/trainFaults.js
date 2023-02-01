@@ -16,7 +16,7 @@ export default {
         setError:(state,error)=>state.error = error,
     },
     actions:{
-        async findTrains({commit}){
+        async findTrainFaults({commit}){
             try{
                 let response = await commonApi.findHMIMessages();
                 commit('setItems',response.data);

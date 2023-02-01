@@ -53,8 +53,10 @@ export default {
         },
         uploadingImage(state) {
             state.isLoading = true;
-            state.isError = false;
             state.isSuccess = false;
+            state.successMessage = '';
+            state.isError = false;
+            state.error = '';
         },
         uploadImageSuccess(state,image){
             if(!Array.isArray(state.images)) {
@@ -66,6 +68,13 @@ export default {
             state.error = '';
             state.isSuccess = true;
             state.successMessage = 'Файлът е качен!';
+        },
+        deletingImage(state){
+            state.isLoading = false;
+            state.isSuccess = false;
+            state.successMessage = '';
+            state.isError = false;
+            state.error = '';
         },
         deletingImageSuccess(state,image){
             state.isSuccess = true;
@@ -84,6 +93,7 @@ export default {
     actions:{
         async uploadImage({commit},image){
             try{
+                commit('uploadingImage');
                 const response = await commonApi.uploadImage(image);
                 commit('uploadImageSuccess',response.data);
                 return response.data
@@ -114,9 +124,9 @@ export default {
         },
         async delete({commit},imageIri){
             try{
+                commit('deletingImage');
                 const response = await commonApi.deleteImage(imageIri);
                 commit('deletingImageSuccess',imageIri)
-                console.log(response.status)
             }catch (e) {
                 let error = e.response.data;
                 if(error.hasOwnProperty('hydra:description')){

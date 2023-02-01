@@ -1,5 +1,6 @@
 <template>
   <div>
+    <alert-manager :alert-message="alertMessage"></alert-manager>
     <a href="#" class="btn btn-warning float-right btn-sm" @click.prevent="clearFiles" v-if="value.length>0">изчисти</a>
     <div class="input-field" @click="show_modal = true">
       <div class="helper" v-if="value.length === 0">ИЗБОР НА ИЗОБРАЖЕНИЕ</div>
@@ -18,6 +19,8 @@
         @selected="selectFiles"
         :multiple="multiple"
         :server="server"
+        :clearSelectedFile="value"
+        :alert-message="alertMessage"
     >
       <template #header><h4>Избери изображение</h4></template>
     </file-select>
@@ -26,12 +29,13 @@
 </template>
 
 <script>
-import FileSelect from '@vue/components/vue-image-manager/FileSelectComponent'
+import FileSelect from '@vue/components/vue-image-manager/FileSelectComponent';
+import AlertManager from "@vue/components/common-component/AlertManagerComponent";
 
 export default {
   name:'FileInput',
   components: {
-    FileSelect
+    FileSelect,AlertManager
   },
 
   props: {
@@ -52,6 +56,21 @@ export default {
     return {
       show_modal: false,
     }
+  },
+  computed:{
+    alertMessage:{
+      get:function(){
+        return{
+          isError:this.$store.getters["ImageModule/getIsError"],
+          error:this.$store.getters["ImageModule/getError"],
+          isSuccess:this.$store.getters["ImageModule/getIsSuccess"],
+          successMessage:this.$store.getters["ImageModule/getSuccessMessage"]
+        }
+      },
+      set:function (value){
+        //this.alertMessage = value;
+      }
+    },
   },
   methods: {
     selectFiles(files) {

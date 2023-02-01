@@ -51,7 +51,7 @@ class TrainFault
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
-     * @Groups({"fault:read"})
+     * @Groups({"fault:read","event:read"})
      */
     private $faultDescription;
 
@@ -69,7 +69,7 @@ class TrainFault
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"fault:read"})
+     * @Groups({"fault:read","event:read"})
      */
     private $faultCategory;
 

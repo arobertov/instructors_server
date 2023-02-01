@@ -1,18 +1,43 @@
 <template>
   <div>
+    <div class="event event-caption">
+      <h3>{{event.title}}</h3>
+    </div>
     <div class="event-creation" v-if="event.owner">
-      <p v-if="checkAbility" id="owner-options"><a href="#">Редактирай! </a> | <a href="#">Изтрий!</a></p>
+      <p class="category-preview"><strong>Категория: </strong>{{event.category.name}}</p>
       <p id="date-user-data">написано от: {{event.owner.alias}} | дата: {{ event.dateEdited | formatDate }}</p>
     </div>
     <div style="clear: both"></div>
-    <div class="event event-caption">
-      <span class="mr-2">Заглавие: </span><h3 class="d-inline">{{event.title}}</h3>
-    </div>
     <b-row>
       <b-col>
         <div class="event event-content">
-          <p>Съдържание: <span v-html="event.content"></span></p>
+          <span v-html="event.content" class="event-text"></span>
         </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col md="2">
+        <div class="event train-number" v-if="event.train">Влак №: {{event.train.trainNumber}}</div>
+      </b-col>
+      <b-col md="6">
+        <div class="event train-number" v-if="event.trainFaults" >
+          <b-button
+              :id="`popover-id-${key}`"
+              v-for="(selTF,key) in event.trainFaults"
+              :key="key"
+              size="sm"
+              :variant="checkVariant(selTF)"
+              class="m-1"
+          >
+            <b v-if="selTF.faultCategory!=='-'">Kат. {{selTF.faultCategory }}  </b>
+            {{selTF.faultDescription}}
+          </b-button>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <p v-if="checkAbility" id="owner-options"><a href="#">Редактирай! </a> | <a href="#">Изтрий!</a></p>
       </b-col>
     </b-row>
   </div>
@@ -48,6 +73,22 @@ export default {
       },
       immediate: true,
     },
+  },
+  methods:{
+    checkVariant(st){
+      switch (st.faultCategory) {
+        case 'A':
+          return 'danger'
+        case 'B':
+          return 'dark'
+        case 'C':
+          return 'warning'
+        case 'D':
+          return 'light'
+        default:
+          return 'info'
+      }
+    },
   }
 }
 </script>
@@ -63,16 +104,23 @@ export default {
     font-style: italic;
     color: #778080;
   }
-  #date-user-data{
+  .event-creation #date-user-data{
     float: right;
   }
   #owner-options{
     float: left;
   }
   .event-caption{
+    padding: 0.8rem;
+    font-family: "Pt Serif", Serif;
+  }
+
+  .event-content,
+  .train-number{
     padding:1rem 1rem 1.5rem 1.5rem;
   }
-  .event-content{
-    padding:1rem 1rem 1.5rem 1.5rem;
+  .category-preview{
+    padding-left: 2rem;
+    float: left;
   }
 </style>

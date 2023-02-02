@@ -35,7 +35,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("TrainModule/findTrains");
-    this.$store.dispatch("EventModule/findEvents");
   },
   computed:{
     event(){

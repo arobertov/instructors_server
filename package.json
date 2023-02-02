@@ -30,6 +30,7 @@
     "moment": "^2.29.3",
     "quill-image-drop-module": "^1.0.3",
     "quill-image-resize-module": "^3.0.0",
+    "superfish": "^1.7.10",
     "vee-validate": "3",
     "vue-axios": "^3.4.1",
     "vue-breadcrumbs": "^1.2.0",

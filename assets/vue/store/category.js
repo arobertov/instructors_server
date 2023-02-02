@@ -105,6 +105,15 @@ export default {
                 commit('hasError',true);
                 commit('setError',e);
             }
+        },
+        async findCategory({commit},id){
+            try{
+               let response = await commonApi.findCategory(id);
+               commit('setItem',response.data);
+            }catch (e) {
+                commit('hasError',true);
+                commit('setError',e);
+            }
         }
     }
 }

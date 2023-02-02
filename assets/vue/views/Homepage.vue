@@ -1,11 +1,12 @@
 <template>
   <main>
-    <navbar-top-menu :user="user"/>
     <b-container fluid="lg" id="wrapper">
-      <b-breadcrumb :items="items"></b-breadcrumb>
+      <navbar-top-menu :user="user"/>
+      <div class="site-breadcrumb"><b-breadcrumb :items="items"></b-breadcrumb></div>
       <router-view/>
       <login-form/>
       <register-form/>
+      <site-footer/>
     </b-container>
   </main>
 
@@ -15,12 +16,15 @@
 import NavbarTopMenu from "../components/NavbarTopMenuComponent";
 import LoginForm from "../components/security-component/LoginFormComponent";
 import RegisterForm from "../components/security-component/RegisterFormComponent";
+import SiteFooter from "@vue/components/SiteFooterComponent";
+
 export default {
   name: "Homepage",
   components:{
     NavbarTopMenu,
     LoginForm,
-    RegisterForm
+    RegisterForm,
+    SiteFooter
   },
   data() {
     return {
@@ -50,8 +54,21 @@ export default {
 </script>
 
 <style scoped>
+body{
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+}
+.site-breadcrumb{
+  margin: 5px 15px;
+}
 #wrapper{
-  padding: 0  ;
-  background-color: #ffffff;
+  padding: 0;
+  background-color: #cccccc;
+  min-height: 600px;
 }
 </style>

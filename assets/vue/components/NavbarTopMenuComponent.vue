@@ -1,5 +1,6 @@
 <template>
-  <b-navbar toggleable="md" type="dark" variant="green" sticky>
+  <b-navbar toggleable="md" type="dark" variant="info" sticky>
+    <b-navbar-brand href="#"><img :src="require(`@images/site-images/logo.jpg`)" alt=""></b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>

@@ -59,6 +59,7 @@ class Category
     private $description;
 
     /**
+     * @Groups({"category:read"})
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="category", orphanRemoval=true)
      */
     private $events;

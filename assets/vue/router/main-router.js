@@ -7,6 +7,7 @@ import ListEvents from "../components/ListEventsComponent";
 import HMIMessages from "../components/HMIMessagesComponent";
 import EventPreview from "../views/Event/EventPreview";
 import EditEvent from "@vue/components/event-components/EditEventComponent";
+import EventsByCategory from "@vue/views/Event/EventsByCategoryView";
 
 export default new VueRouter({
     mode:'history',
@@ -74,7 +75,20 @@ export default new VueRouter({
                             {text:'Редактирай събитие',to:{name:'site_edit_preview'}}
                         ]
                     }
-                }
+                },
+                {
+                    path:"preview/by-category/:category_id",
+                    name:"site_event_by_category_preview",
+                    component: EventsByCategory,
+                    meta:{
+                        requiresAuth: true,
+                        item:[
+                            {text:'Начало',to:{name:'site_index'}},
+                            {text:'Събития',to:{name:'site_events'}},
+                            {text:'Събития по категории',to:{name:'site_event_by_category_preview'}}
+                        ]
+                    }
+                },
             ]
         },
         {

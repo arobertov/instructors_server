@@ -1,7 +1,7 @@
 <template>
-  <b-container fluid="lg" id="content-wrapper">
+  <div id="content-wrapper">
     <router-view></router-view>
-  </b-container>
+  </div>
 
 </template>
 
@@ -15,6 +15,6 @@ export default {
 #content-wrapper{
   padding-top: 10px;
   padding-bottom: 15px;
-  background-color: #ffffff;
+
 }
 </style>

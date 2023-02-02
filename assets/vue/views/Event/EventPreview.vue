@@ -3,22 +3,27 @@
     <div class="event event-caption">
       <h3>{{event.title}}</h3>
     </div>
-    <div class="event-creation" v-if="event.owner">
-      <p class="category-preview"><strong>Категория: </strong>{{event.category.name}}</p>
-      <p id="date-user-data">написано от: {{event.owner.alias}} | дата: {{ event.dateEdited | formatDate }}</p>
+    <div class="event-creation" >
+      <p class="category-preview" v-if="event.category"><strong>Категория: </strong>{{event.category.name}}</p>
+      <p class="train-number" v-if="event.train">Влак №: {{event.train.trainNumber}}</p>
+      <p id="date-user-data"v-if="event.owner" >добавено от: {{event.owner.alias}} на дата: {{ event.dateEdited | formatDate }}</p>
     </div>
     <div style="clear: both"></div>
     <b-row>
-      <b-col>
+      <b-col md="3">
+        <div v-if="event.images" v-for="(image, i) in event.images" :key="`file_${i}`" >
+          <div class="article-image">
+            <img :src="require(`@images/${image.filePath}`)" :alt="image.filePath">
+          </div>
+        </div>
+      </b-col>
+      <b-col md="9">
         <div class="event event-content">
           <span v-html="event.content" class="event-text"></span>
         </div>
       </b-col>
     </b-row>
     <b-row>
-      <b-col md="2">
-        <div class="event train-number" v-if="event.train">Влак №: {{event.train.trainNumber}}</div>
-      </b-col>
       <b-col md="6">
         <div class="event train-number" v-if="event.trainFaults" >
           <b-button
@@ -114,13 +119,19 @@ export default {
     padding: 0.8rem;
     font-family: "Pt Serif", Serif;
   }
-
-  .event-content,
   .train-number{
+    float: left;
+    padding-left: 4rem;
+  }
+  .event-content{
     padding:1rem 1rem 1.5rem 1.5rem;
   }
   .category-preview{
     padding-left: 2rem;
     float: left;
+  }
+  .article-image img {
+    width: 220px;
+    padding: 3px;
   }
 </style>

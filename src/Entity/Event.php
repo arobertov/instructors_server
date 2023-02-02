@@ -41,7 +41,7 @@ class Event
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"event:read"})
+     * @Groups({"event:read","category:read"})
      */
     private $id;
 
@@ -51,14 +51,14 @@ class Event
      *      min = 3,
      *      minMessage = "Title name must be at least {{ limit }} characters long",
      * )
-     * @Groups({"event:read","event:write"})
+     * @Groups({"event:read","event:write","category:read"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
-     * @Groups({"event:read","event:write"})
+     * @Groups({"event:read","event:write","category:read"})
      */
     private $content;
 

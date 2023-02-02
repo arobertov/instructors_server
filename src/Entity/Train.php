@@ -47,6 +47,7 @@ class Train
     private $trainNumber;
 
     /**
+     * * @Groups({"train:read"})
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="train")
      */
     private $events;

@@ -10,6 +10,9 @@ export default {
     findCategories(){
         return axios.get('/api/categories');
     },
+    findCategory(id){
+      return axios.get(`/api/categories/${id}`);
+    },
     createCategory(category){
         return axios.post('/api/categories',{name:category});
     },

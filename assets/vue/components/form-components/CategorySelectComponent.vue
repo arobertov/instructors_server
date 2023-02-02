@@ -72,9 +72,8 @@ export default {
     categoryInput
   },
   props: ['value'],
-  created() {
-    const categories = this.$store.getters["CategoryModule/getCategories"]
-    if(Array.isArray(categories)&&categories.length===0){
+  mounted() {
+    if(Array.isArray(this.categories) && this.categories.length === 0){
       this.$store.dispatch("CategoryModule/findCategories");
     }
   },
@@ -88,7 +87,11 @@ export default {
       return this.value;
     },
     categories() {
-      return this.$store.getters["CategoryModule/getCategories"]["hydra:member"];
+      let categories = this.$store.getters["CategoryModule/getCategories"]
+      if(typeof categories === "object" && categories.hasOwnProperty("hydra:member")){
+        return categories["hydra:member"];
+      }
+      return categories;
     },
     options(){
       let options = [];

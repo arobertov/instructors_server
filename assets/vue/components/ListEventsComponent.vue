@@ -104,7 +104,7 @@ export default {
   name: "ListEvents",
   data(){
     return{
-      recordsPerPage:5,
+      recordsPerPage:10,
       currentPage:1,
       sortDirection: 'asc',
       filter: null,

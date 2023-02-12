@@ -83,8 +83,7 @@ export default {
         if(typeof this.value==='object'&& this.value.hasOwnProperty('@id')){
           return this.value["@id"];
         }
-      }
-      return this.value;
+      } return this.value;
     },
     categories() {
       let categories = this.$store.getters["CategoryModule/getCategories"]

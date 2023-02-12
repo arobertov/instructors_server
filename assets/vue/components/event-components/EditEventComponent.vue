@@ -1,7 +1,7 @@
 <template>
   <event-form @submitForm="editEvent">
     <template v-slot:submit-btn="{invalid}">
-      <b-button :disabled="invalid" type="submit" variant="success" id="submit-btn">Редактирай</b-button>
+      <b-button :disabled="invalid" type="submit" variant="success" id="submit-btn" >Редактирай</b-button>
     </template>
   </event-form>
 </template>
@@ -14,8 +14,12 @@ export default {
     EventForm
   },
   methods:{
-    editEvent(ev){
-      console.log(ev)
+    async editEvent(event){
+      const result = await this.$store.dispatch("EventModule/editEvent", event);
+      if (result.hasOwnProperty('id')) {
+        await this.$router.push({name: "site_event_preview", params: {"id": result.id}})
+      }
+      return result;
     }
   },
   watch: {

@@ -1,9 +1,9 @@
 <template>
-  <b-card no-body id="category-events">
+  <b-card no-body id="category-events" v-if="category">
     <template #header>
       <h6>Събития по категории</h6>
     </template>
-    <b-list-group flush v-if="category.events" >
+    <b-list-group flush  v-if="category.events">
       <b-list-group-item v-for="event in category.events" :key="event.id">
         <h5><router-link :to="{name:'site_event_preview',params:{id:event.id}}">{{event.title}}</router-link></h5>
         <elipsis :content="event.content" :word-length="45"/>

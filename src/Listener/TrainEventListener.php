@@ -25,14 +25,15 @@ class TrainEventListener
         //if($event->getDateCreated()===null){
          //
         //}
-        $event->setDateCreated(new DateTime('now'));
-        $event->setDateEdited(new DateTime('now'));
+        //$event->setDateCreated(new DateTime('now'));
+       // $event->setDateEdited(new DateTime('now'));
     }
 
     public function preUpdate(Event $event){
         if($event->getOwner()){
             return;
         }
+
         if($this->security->getUser()){
             $event->setOwner($this->security->getUser());
         }

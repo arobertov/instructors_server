@@ -1,19 +1,22 @@
 <template>
   <div class="file-select-wrapper">
     <Modal
-      :show-modal="showModal"
-      @close="$emit('close')"
+        :show-modal="showModal"
+        @close="$emit('close')"
     >
       <template #body>
         <div class="navigation">
           <ul>
             <li>
               <a href="#" class="btn btn-primary btn-sm">
-                <b-icon-caret-left></b-icon-caret-left> Назад
+                <b-icon-caret-left></b-icon-caret-left>
+                Назад
               </a>
             </li>
             <li>
-              <a href="#" ><b-icon-house></b-icon-house> /</a>
+              <a href="#">
+                <b-icon-house></b-icon-house>
+                /</a>
             </li>
             <li class="float-right">
               <a href="#" class="btn btn-primary btn-sm" @click.prevent="clickUploadInput">
@@ -27,11 +30,12 @@
                   class="btn btn-primary btn-sm"
                   @click.prevent="show_add_folder = !show_add_folder"
               >
-                <b-icon-folder2></b-icon-folder2> Папка
+                <b-icon-folder2></b-icon-folder2>
+                Папка
               </a>
               <div class="add-folder" v-if="show_add_folder">
                 <input type="text" placeholder="Name" v-model="new_folder"/>
-                <button class="btn btn-primary btn-sm" >save</button>
+                <button class="btn btn-primary btn-sm">save</button>
               </div>
             </li>
           </ul>
@@ -42,7 +46,7 @@
         </div>
         <div class="images" v-else>
           <div class="image" v-for="(dir, i) in dirs" :key="`folder_${i}`">
-            <a href="#" >
+            <a href="#">
                     <span class="preview">
                       <i class="fa fa-folder-o"></i>
                     </span>
@@ -50,24 +54,29 @@
             </a>
           </div>
           <!-------- select image grid  ---------------->
-          <div class="image" v-for="(file, i) in files" :key="`file_${i}`">
-            <input
-                type="radio"
-                :id="`file_${i}`"
-                :value="[file]"
-                v-model="selected_files"
-                style="display: none;"
-            />
-            <label :for="`file_${i}`">
-              <figure class="preview">
-                <img :src="require(`@images/${file.filePath}`)" :alt="file.filePath">
-              </figure>
-              <span class="name" :title="file.id">
-                      <a  href="#" class="delete-image" @click="deleteImage(file['@id'])">
-                        <b-icon-trash  variant="danger"></b-icon-trash>
+          <div v-if="files.length>0">
+            <div class="image" v-for="(file, i) in files" :key="`file_${i}`">
+              <input
+                  type="radio"
+                  :id="`file_${i}`"
+                  :value="[file]"
+                  v-model="selected_files"
+                  style="display: none;"
+              />
+              <label :for="`file_${i}`">
+                <figure class="preview" v-if="checkImageModule(file)">
+                  <img :src="require(`@images/${file.filePath}`)" :alt="file.filePath">
+                </figure>
+                <span class="name" :title="file.id">
+                      <a href="#" class="delete-image" @click="deleteImage(file['@id'])">
+                        <b-icon-trash variant="danger"></b-icon-trash>
                       </a>
                     </span>
-            </label>
+              </label>
+            </div>
+          </div>
+          <div v-else class="noting-images">
+            <b-alert show variant="warning">Няма качени изображения</b-alert>
           </div>
         </div>
       </template>
@@ -76,7 +85,8 @@
             variant="info"
             size="sm"
             @click.prevent="$emit('close')">
-          <b-icon-x-circle></b-icon-x-circle> Затвори
+          <b-icon-x-circle></b-icon-x-circle>
+          Затвори
         </b-button>
         <slot name="checkButton">
           <b-button
@@ -85,7 +95,8 @@
               :disabled="selected_files.length===0"
               @click.prevent="$emit('selected', selected_files)"
           >
-            <b-icon-check2></b-icon-check2> Избор
+            <b-icon-check2></b-icon-check2>
+            Избор
           </b-button>
         </slot>
       </template>
@@ -99,7 +110,8 @@
         id="file_uploads_selector"
     />
     <b-button block variant="primary" @click.prevent="clickUploadInput">
-      <b-icon-upload></b-icon-upload>Качи файл
+      <b-icon-upload></b-icon-upload>
+      Качи файл
     </b-button>
   </div>
 </template>
@@ -107,9 +119,10 @@
 <script>
 import Modal from "@vue/components/ModalComponent";
 import AlertManager from "@vue/components/common-component/AlertManagerComponent";
+
 export default {
-  name:"FileSelect",
-  components:{ Modal, AlertManager },
+  name: "FileSelect",
+  components: {Modal, AlertManager},
   mounted() {
     if (this.$store.getters["ImageModule/getImages"].length < 1) {
       this.$store.dispatch("ImageModule/findAllImages");
@@ -125,12 +138,12 @@ export default {
     };
   },
   props: {
-    alertMessage:{
-      type:Object
+    alertMessage: {
+      type: Object
     },
-    clearSelectedFile:{
+    clearSelectedFile: {
       type: Array,
-      default(){
+      default() {
         return [];
       }
     },
@@ -168,25 +181,29 @@ export default {
   },
 
   methods: {
+    checkImageModule(file){
+      let something = require(`@images/${file.filePath}`);
+      return  something !=="";
+    },
     clickUploadInput() {
       this.$refs.upload_files.click()
     },
 
     async uploadFiles() {
-      try{
+      try {
         let formData = new FormData();
         let data = this.$refs.upload_files.files[0];
         formData.append('fileImage', data);
         let result = await this.$store.dispatch("ImageModule/uploadImage", formData);
         this.selected_files.push(result)
-        this.$emit('selected',this.selected_files);
-      }catch (e) {
+        this.$emit('selected', this.selected_files);
+      } catch (e) {
         console.log(e)
       }
     },
 
-    async deleteImage(imageIri){
-      const result = await this.$store.dispatch("ImageModule/delete",imageIri)
+    async deleteImage(imageIri) {
+      const result = await this.$store.dispatch("ImageModule/delete", imageIri)
     }
     /*
     fetchDir(dir) {
@@ -215,8 +232,8 @@ export default {
      */
   },
   watch: {
-    clearSelectedFile(newval,oldval){
-      if(newval){
+    clearSelectedFile(newval, oldval) {
+      if (newval) {
         this.selected_files = [];
       }
     },
@@ -226,11 +243,11 @@ export default {
 
 <style lang="css" scoped>
 
-#file-select label{
+#file-select label {
   padding: 5px;
 }
 
-.name{
+.name {
   background-color: rgba(239, 239, 239, 1);
 }
 
@@ -246,5 +263,8 @@ figure {
   float: left;
   margin: 3px;
   padding: 3px;
+}
+.noting-images{
+  min-height: 200px;
 }
 </style>

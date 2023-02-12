@@ -42,7 +42,10 @@
     </b-row>
     <b-row>
       <b-col>
-        <p v-if="checkAbility" id="owner-options"><a href="#">Редактирай! </a> | <a href="#">Изтрий!</a></p>
+        <p v-if="checkAbility" id="owner-options">
+          <router-link :to="{name:'site_edit_preview',params:{id:event.id}}">Редактирай! </router-link>
+          | <a href="#">Изтрий!</a>
+        </p>
       </b-col>
     </b-row>
   </div>

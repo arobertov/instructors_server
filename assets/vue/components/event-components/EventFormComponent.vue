@@ -1,12 +1,13 @@
 <template>
   <validation-observer ref="publicationForm" v-slot="{ handleSubmit, invalid}">
-    <b-form @submit.stop.prevent="onSubmit">
+    <b-form @submit.stop.prevent="onSubmit" v-if="event">
       <title-input v-model="title" placeholder="Въведете заглавие с дължина минимум от 3 символа"/>
       <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
+      <date-time v-model="dateCreated"/>
       <image-manager/>
       <train-select :event="event"></train-select>
       <category-select v-model="category"/>
-      <train-fault v-model="trainFaults"/>
+      <train-fault v-model="selectedTrainFaults"/>
       <b-form-row>
         <div class="m-4">
           <slot name="submit-btn" :invalid="invalid">
@@ -26,49 +27,50 @@ import CategorySelect from "@vue/components/form-components/CategorySelectCompon
 import TrainFault from "@vue/components/form-components/TrainFaultSelectComponent";
 import TrainSelect from "@vue/components/form-components/TrainSelectComponent";
 import {mapFields} from "vuex-map-fields";
+import DateTime from "@vue/components/form-components/DateTimeComponent";
 
 
 export default {
   name: "EventFormComponent",
-  components:{
-    TitleInput, ContentInput,CategorySelect,TrainFault,ImageManager,TrainSelect
+  components: {
+    TitleInput, ContentInput, CategorySelect, TrainFault, ImageManager, TrainSelect,DateTime
   },
   mounted() {
     this.$store.dispatch("TrainModule/findTrains");
   },
-  computed:{
-    event(){
+  computed: {
+    event() {
       return this.$store.getters["EventModule/getItem"];
     },
-    trainFaults:{
-      get(){
-        let selectedTrains = [],trainFaults = this.event.trainFaults
-        if (Array.isArray(trainFaults) && trainFaults.length > 0) {
-          selectedTrains = trainFaults.map(tf=>tf['@id'])
-          console.log(selectedTrains)
-          return selectedTrains;
+    selectedTrainFaults: {
+      get: function () {
+        let selectedTrainFaults = this.$store.getters["EventModule/getSelectedTrainFaults"];
+
+        if (Array.isArray(selectedTrainFaults) && selectedTrainFaults.filter(v => v['@id']).length > 0) {
+          return selectedTrainFaults.map(v => v['@id'])
         }
-        return trainFaults
+        return selectedTrainFaults;
       },
-      set(value){
-        this.$store.commit("EventModule/setTrainFaults",value.map(v=>v['@id']));
+      set: function (value) {
+        return this.$store.commit("EventModule/setTrainFaults", value)
       }
+
     },
-    ...mapFields("EventModule",[
-    'event.title',
-    'event.content',
-    'event.category',
-    'event.trainFaults',
-  ]),
-    events(){
+    ...mapFields("EventModule", [
+      'event.title',
+      'event.content',
+      'event.category',
+      'event.dateCreated'
+    ]),
+    events() {
       return this.$store.getters["EventModule/getItems"]["hydra:member"];
     },
   },
-  methods:{
-    onSubmit(){
+  methods: {
+    onSubmit() {
       this.$refs.publicationForm.validate().then(success => {
         if (success) {
-          this.$emit('submitForm',this.event)
+          this.$emit('submitForm', this.event)
         }
       })
     },

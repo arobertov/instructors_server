@@ -20,7 +20,9 @@ export default {
             train: null,
             images: [],
             tags: [],
-            trainFaults: []
+            trainFaults: [],
+            dateCreated:"",
+            dateEdited:""
         },
         events: [],
         error: null,
@@ -33,6 +35,7 @@ export default {
         getItem: state => state.event,
         getImages:state=>state.event.images,
         getItems: state => state.events,
+        getSelectedTrainFaults: state => state.event.trainFaults,
         getError: state => state.error,
         isError: state => state.error !== null,
         hasEvents: state => state.events.length > 0,
@@ -67,7 +70,7 @@ export default {
         deletingSuccess:(state,eventID)=>{
             state.events["hydra:member"] = state.events["hydra:member"].filter(e=>e.id!==eventID);
             state.events["hydra:totalItems"] -= 1;
-            state.isError=false;;
+            state.isError=false;
             state.error='';
             state.isSuccess=true;
             state.successMessage='Събитието бе успешно изтрито!';
@@ -111,12 +114,24 @@ export default {
                 return e;
             }
         },
+        async editEvent({commit}, event) {
+            try {
+                const response = await eventApi.editEvent(event);console.log(response.status)
+                commit('setItem', response.data);
+                return response.data;
+
+                //return "Сърврът върна неочакван отговор!";
+            } catch (e) {
+                commit('hasError', true);
+                commit('setError', e);
+                return e;
+            }
+        },
         async deleteEvent({commit},id){
             try {
                 commit('deleting')
                 const response = await eventApi.deleteEvent(id);
                 commit('deletingSuccess',id)
-                console.log(response.status)
                 return response.data;
 
             }catch (e) {

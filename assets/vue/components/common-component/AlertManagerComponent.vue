@@ -25,7 +25,6 @@ export default {
   watch:{
     alertMessage(newval,oldval){
       if(newval) {
-        console.log(newval)
         this.alert = newval
       }
     }

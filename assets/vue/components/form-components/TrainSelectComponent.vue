@@ -4,7 +4,7 @@
       label-for="_train-select"
   >
     <b-form-select v-model="train" :options="options" id="_train-select">
-      <b-form-select-option :value="null">Изберете номер на влак</b-form-select-option>
+      <b-form-select-option :value="undefined">Изберете номер на влак</b-form-select-option>
     </b-form-select>
   </b-form-group>
 </template>
@@ -21,11 +21,8 @@ export default {
     options(){
       let trains = this.$store.getters["TrainModule/getItems"]["hydra:member"],trainNumber;
       if(Array.isArray(trains)){
-        trainNumber = trains.map(function (t){
-          return{
-            text:t.trainNumber,
-            value:t['@id']
-          }
+        return trains.map(function (t){
+          return { text:t.trainNumber, value:t['@id'] }
         });
       }
       return  trainNumber;
@@ -33,11 +30,11 @@ export default {
     train:{
       get:function (){
         let event = this.event;
-        if(event !== null && event.train !== null){
-          if(typeof event ==='object'&& event.train.hasOwnProperty('@id')){
-            return event.train['@id'];
+        if(event !== null){
+          if( typeof event ==='object'&& event.hasOwnProperty('train') && event.train !== null ){
+            if(event.train.hasOwnProperty('@id')) return  event.train['@id']
           }
-          return event.train;
+          return undefined;
         }
       },
       set:function (newValue) {

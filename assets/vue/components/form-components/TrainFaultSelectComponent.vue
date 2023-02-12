@@ -28,7 +28,7 @@
           v-bind:value="value"
           v-on:input="$emit('input', $event)"
           :options="options"
-          multiple :select-size="4"
+          multiple :select-size="8"
       >
       </b-form-select>
     </b-form-group>
@@ -36,11 +36,15 @@
 </template>
 
 <script>
+
 export default {
   name: "TrainFaultSelectComponent",
   props: ['value'],
   mounted() {
-    this.$store.dispatch("TrainFaults/findTrainFaults")
+    this.$store.dispatch("TrainFaults/findTrainFaults");
+  },
+  destroyed() {
+    this.$store.commit("EventModule/creatingEvent");
   },
   computed: {
     isSelectedTrainFaults(){
@@ -48,10 +52,11 @@ export default {
     },
     selectedTrainFaults:{
       get(){
-        let selectedTrains = []
-        if (Array.isArray(this.trainFaults) && this.trainFaults.length > 0) {
+        let selectedTrains = [];
+        if (Array.isArray(this.trainFaults) && this.trainFaults.length > 0 && this.value !== undefined) {
           selectedTrains = this.trainFaults.filter(tf =>this.value.includes(tf['@id']) );
-          selectedTrains.map(st=>st.variant=this.checkVariant(st))
+          selectedTrains.map(st=>st.variant=this.checkVariant(st));
+          return selectedTrains;
         }
         return selectedTrains;
       },
@@ -75,8 +80,7 @@ export default {
   },
   methods:{
     deselectTrainFaults(selectedValue){
-      let selected = this.selectedTrainFaults.filter(tf=>!tf['@id'].includes(selectedValue));
-      this.selectedTrainFaults = selected;
+      this.selectedTrainFaults = this.selectedTrainFaults.filter(tf => !tf['@id'].includes(selectedValue));
     },
     checkVariant(st){
       switch (st.faultCategory) {

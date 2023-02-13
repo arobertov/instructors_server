@@ -3,7 +3,7 @@ import IndexView from "../views/IndexView";
 import EventView from "../views/Event/EventView";
 import EventCreate from "../views/Event/EventCreateView";
 import CategoriesList from "../views/Category/CategoriesListView";
-import ListEvents from "../components/ListEventsComponent";
+import ListEvents from "../components/event-components/ListEventsComponent";
 import HMIMessages from "../components/HMIMessagesComponent";
 import EventPreview from "../views/Event/EventPreview";
 import EditEvent from "@vue/components/event-components/EditEventComponent";

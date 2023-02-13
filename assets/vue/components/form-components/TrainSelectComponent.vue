@@ -17,6 +17,12 @@ export default {
       type:Object
     }
   },
+  beforeMount() {
+    let trains = this.$store.getters["TrainModule/getItems"];
+    if(Array.isArray(trains) && trains.length===0){
+      this.$store.dispatch("TrainModule/findTrains");
+    }
+  },
   computed:{
     options(){
       let trains = this.$store.getters["TrainModule/getItems"]["hydra:member"],trainNumber;

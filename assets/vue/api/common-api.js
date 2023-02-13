@@ -8,7 +8,7 @@ export default {
         return axios.get('/api/train_faults');
     },
     findCategories(){
-        return axios.get('/api/categories');
+        return axios.get('/api/categories?page=1&order%5Bname%5D=asc');
     },
     findCategory(id){
       return axios.get(`/api/categories/${id}`);

@@ -6,6 +6,8 @@
       <router-view/>
       <login-form/>
       <register-form/>
+    </b-container>
+    <b-container fluid="lg" id="footer-wrapper">
       <site-footer/>
     </b-container>
   </main>
@@ -66,9 +68,9 @@ body{
 .site-breadcrumb{
   margin: 5px 15px;
 }
-#wrapper{
+#wrapper,
+#footer-wrapper {
   padding: 0;
   background-color: #cccccc;
-  min-height: 600px;
 }
 </style>

@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "delete"={"security"="is_granted('DELETE',object)","security_message"="Нямате необходимите права да изтривате категорията."}
  *     }
  * )
+ * @ApiFilter(OrderFilter::class,properties={"name":"ASC"})
  * @ORM\Table(name="categories")
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */

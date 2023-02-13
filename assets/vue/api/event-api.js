@@ -7,7 +7,9 @@ function mapEventObject(event){
         train: event.train,
         category: event.category,
         tags: event.tags,
-        trainFaults: event.trainFaults
+        trainFaults: event.trainFaults,
+        dateCreated: event.dateCreated,
+        dateEdited: event.dateCreated
     }
 }
 export default {

@@ -3,7 +3,7 @@
     <b-form @submit.stop.prevent="onSubmit" v-if="event">
       <title-input v-model="title" placeholder="Въведете заглавие с дължина минимум от 3 символа"/>
       <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
-      <date-time v-model="dateCreated"/>
+      <date-time/>
       <image-manager/>
       <train-select :event="event"></train-select>
       <category-select v-model="category"/>
@@ -60,7 +60,6 @@ export default {
       'event.title',
       'event.content',
       'event.category',
-      'event.dateCreated'
     ]),
     events() {
       return this.$store.getters["EventModule/getItems"]["hydra:member"];

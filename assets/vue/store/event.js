@@ -50,7 +50,9 @@ export default {
                 train: null,
                 images: [],
                 tags: [],
-                trainFaults: []
+                trainFaults: [],
+                dateCreated:new Date(),
+                dateEdited:""
             };
             state.error = null;
             state.isError = false;
@@ -65,6 +67,7 @@ export default {
         setCategory: (state, category) => state.event.category = category,
         attachImages:(state,images)=>state.event.images = images,
         setTrainFaults: (state, trainFaults) => state.event.trainFaults = trainFaults,
+        setDateCreated:(state,dateCreated) => state.event.dateCreated = dateCreated,
         hasError: (state, isError) => state.isError = isError,
         deleting:(state)=>{state.isError=false;state.error='';state.isSuccess=false;state.successMessage=''},
         deletingSuccess:(state,eventID)=>{

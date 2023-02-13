@@ -25,7 +25,7 @@ function vueCommonSets(){
     //--------------  datetime filer  --------------------- //
     Vue.filter('formatDate', function (value) {
         if (value) {
-            return moment(String(value)).locale('bg').format('DD.MM.YYYY[ г. - ] HH:MM')
+            return moment(String(value)).locale('bg').format('DD.MM.YY[ г. - ] HH:m')
         }
     });
 }

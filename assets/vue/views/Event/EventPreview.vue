@@ -28,14 +28,14 @@
         <div class="event train-number" v-if="event.trainFaults" >
           <b-button
               :id="`popover-id-${key}`"
-              v-for="(selTF,key) in event.trainFaults"
+              v-for="(trainFault,key) in event.trainFaults"
               :key="key"
               size="sm"
-              :variant="checkVariant(selTF)"
+              :variant="checkVariant(trainFault)"
               class="m-1"
           >
-            <b v-if="selTF.faultCategory!=='-'">Kат. {{selTF.faultCategory }}  </b>
-            {{selTF.faultDescription}}
+            <b v-if="trainFault.faultCategory!=='-'">Kат. {{trainFault.faultCategory }}  </b>
+            {{trainFault.faultDescription}}
           </b-button>
         </div>
       </b-col>

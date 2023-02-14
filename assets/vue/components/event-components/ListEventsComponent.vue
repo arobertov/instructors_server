@@ -168,8 +168,6 @@ export default {
   methods:{
     checkAbility(event){
       const user = this.user;
-      //$store.getters["UserModule/getUser"];
-      //const event = this.$store.getters["EventModule/getItem"];
       if( user === null || !user.hasOwnProperty('alias')){
         return false;
       }

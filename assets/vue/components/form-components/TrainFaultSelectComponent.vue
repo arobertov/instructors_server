@@ -23,6 +23,21 @@
         label="Съобщения на HMI:"
         label-for="_hmi-messages"
     >
+      <b-input-group size="sm">
+        <b-input-group-prepend>
+          <b-button disabled>Филтър <b-icon icon="search"></b-icon></b-button>
+        </b-input-group-prepend>
+        <b-form-input
+            id="filter-input"
+            v-model="filteredOptions"
+            type="search"
+            placeholder="Въведи стойност за търсене"
+        ></b-form-input>
+
+        <b-input-group-append>
+          <b-button :disabled="!filteredOptions" @click="filteredOptions = ''">Изчисти</b-button>
+        </b-input-group-append>
+      </b-input-group>
       <b-form-select
           id="_hmi-messages"
           v-bind:value="value"
@@ -40,6 +55,11 @@
 export default {
   name: "TrainFaultSelectComponent",
   props: ['value'],
+  data(){
+    return{
+      filteredOptions:""
+    }
+  },
   mounted() {
     this.$store.dispatch("TrainFaults/findTrainFaults");
   },
@@ -68,15 +88,32 @@ export default {
     trainFaults() {
       return this.$store.getters["TrainFaults/getItems"]["hydra:member"];
     },
-    options(){
-      let options = [];
-      if(Array.isArray(this.trainFaults)){
-        this.trainFaults.forEach(tf=>{
-          options.push({text:tf.faultDescription,value:tf['@id']});
-        })
+    options:{
+      get: function (){
+        let options = [];
+        if(Array.isArray(this.trainFaults)){
+          this.trainFaults.forEach(tf=>{
+            options.push({text:tf.faultDescription,value:tf['@id']});
+          })
+          return options;
+        }return options;
+      },
+      set:function (value) {
+        this.options = value;
       }
-      return options;
     },
+  },
+  watch:{
+    filteredOptions:function (newValue) {
+      let options = this.options;
+      if(Array.isArray(options)){
+        if(options.filter(v=>v.text.includes(newValue)).length > 0){
+          console.log(newValue)
+          return this.options = options;
+        } return this.options[{text:'Не е намерен запис с такава стойнос',value:''}]
+
+      } return options;
+    }
   },
   methods:{
     deselectTrainFaults(selectedValue){

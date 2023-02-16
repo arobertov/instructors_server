@@ -29,13 +29,13 @@
         </b-input-group-prepend>
         <b-form-input
             id="filter-input"
-            v-model="filteredOptions"
+            v-model="filterKey"
             type="search"
             placeholder="Въведи стойност за търсене"
         ></b-form-input>
 
         <b-input-group-append>
-          <b-button :disabled="!filteredOptions" @click="filteredOptions = ''">Изчисти</b-button>
+          <b-button :disabled="!filterKey" @click="filterKey = ''">Изчисти</b-button>
         </b-input-group-append>
       </b-input-group>
       <b-form-select
@@ -57,11 +57,11 @@ export default {
   props: ['value'],
   data(){
     return{
-      filteredOptions:""
+      filterKey:"",
     }
   },
   mounted() {
-    this.$store.dispatch("TrainFaults/findTrainFaults");
+    this.$store.dispatch("TrainFaults/findTrainFaults")
   },
   destroyed() {
     this.$store.commit("EventModule/creatingEvent");
@@ -86,35 +86,22 @@ export default {
 
     },
     trainFaults() {
-      return this.$store.getters["TrainFaults/getItems"]["hydra:member"];
+      return  this.$store.getters["TrainFaults/getItems"]["hydra:member"];
     },
-    options:{
-      get: function (){
-        let options = [];
-        if(Array.isArray(this.trainFaults)){
-          this.trainFaults.forEach(tf=>{
-            options.push({text:tf.faultDescription,value:tf['@id']});
-          })
-          return options;
-        }return options;
-      },
-      set:function (value) {
-        this.options = value;
+    options(){
+      if(Array.isArray(this.trainFaults)){
+        let options = this.trainFaults.map(function (tf){
+          return{
+            text:tf.faultDescription,
+            value:tf['@id']
+          }
+      })
+        options = options.filter(v => v.text.toLowerCase().includes(this.filterKey.toLowerCase()))
+        return options.length>0?options:options =[{text:"Няма запис отговарящ на търсенето"}];
       }
     },
   },
-  watch:{
-    filteredOptions:function (newValue) {
-      let options = this.options;
-      if(Array.isArray(options)){
-        if(options.filter(v=>v.text.includes(newValue)).length > 0){
-          console.log(newValue)
-          return this.options = options;
-        } return this.options[{text:'Не е намерен запис с такава стойнос',value:''}]
 
-      } return options;
-    }
-  },
   methods:{
     deselectTrainFaults(selectedValue){
       this.selectedTrainFaults = this.selectedTrainFaults.filter(tf => !tf['@id'].includes(selectedValue));

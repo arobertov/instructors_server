@@ -21,19 +21,19 @@ export default {
             images: [],
             tags: [],
             trainFaults: [],
-            dateCreated:"",
-            dateEdited:""
+            dateCreated: "",
+            dateEdited: ""
         },
         events: [],
         error: null,
         isError: false,
-        isSuccess:false,
-        successMessage:null,
+        isSuccess: false,
+        successMessage: null,
     },
     getters: {
         getField,
         getItem: state => state.event,
-        getImages:state=>state.event.images,
+        getImages: state => state.event.images,
         getItems: state => state.events,
         getSelectedTrainFaults: state => state.event.trainFaults,
         getError: state => state.error,
@@ -51,8 +51,8 @@ export default {
                 images: [],
                 tags: [],
                 trainFaults: [],
-                dateCreated:new Date(),
-                dateEdited:""
+                dateCreated: new Date(),
+                dateEdited: ""
             };
             state.error = null;
             state.isError = false;
@@ -64,19 +64,25 @@ export default {
             state.events["hydra:totalItems"] += 1;
         },
         setError: (state, error) => state.error = error,
+        setTrain: (state, train) => state.event.train = train,
         setCategory: (state, category) => state.event.category = category,
-        attachImages:(state,images)=>state.event.images = images,
+        attachImages: (state, images) => state.event.images = images,
         setTrainFaults: (state, trainFaults) => state.event.trainFaults = trainFaults,
-        setDateCreated:(state,dateCreated) => state.event.dateCreated = dateCreated,
+        setDateCreated: (state, dateCreated) => state.event.dateCreated = dateCreated,
         hasError: (state, isError) => state.isError = isError,
-        deleting:(state)=>{state.isError=false;state.error='';state.isSuccess=false;state.successMessage=''},
-        deletingSuccess:(state,eventID)=>{
-            state.events["hydra:member"] = state.events["hydra:member"].filter(e=>e.id!==eventID);
+        deleting: (state) => {
+            state.isError = false;
+            state.error = '';
+            state.isSuccess = false;
+            state.successMessage = ''
+        },
+        deletingSuccess: (state, eventID) => {
+            state.events["hydra:member"] = state.events["hydra:member"].filter(e => e.id !== eventID);
             state.events["hydra:totalItems"] -= 1;
-            state.isError=false;
-            state.error='';
-            state.isSuccess=true;
-            state.successMessage='Събитието бе успешно изтрито!';
+            state.isError = false;
+            state.error = '';
+            state.isSuccess = true;
+            state.successMessage = 'Събитието бе успешно изтрито!';
         }
     },
     actions: {
@@ -119,7 +125,8 @@ export default {
         },
         async editEvent({commit}, event) {
             try {
-                const response = await eventApi.editEvent(event);console.log(response.status)
+                const response = await eventApi.editEvent(event);
+                console.log(response.status)
                 commit('setItem', response.data);
                 return response.data;
 
@@ -130,14 +137,14 @@ export default {
                 return e;
             }
         },
-        async deleteEvent({commit},id){
+        async deleteEvent({commit}, id) {
             try {
                 commit('deleting')
                 const response = await eventApi.deleteEvent(id);
-                commit('deletingSuccess',id)
+                commit('deletingSuccess', id)
                 return response.data;
 
-            }catch (e) {
+            } catch (e) {
                 commit('hasError', true);
                 commit('setError', e);
                 return e;

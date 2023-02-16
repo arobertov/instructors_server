@@ -20,6 +20,7 @@ export default {
             try{
                 let response = await commonApi.findHMIMessages();
                 commit('setItems',response.data);
+                return response;
             }catch (e) {
                 commit('setError',e);
             }

@@ -1,9 +1,10 @@
 <template>
+
   <b-form-group
       label="Номер на влак:"
       label-for="_train-select"
   >
-    <b-form-select v-model="train" :options="options" id="_train-select">
+    <b-form-select v-model="selectedTrain" :options="options" id="_train-select">
       <b-form-select-option :value="undefined">Изберете номер на влак</b-form-select-option>
     </b-form-select>
   </b-form-group>
@@ -12,11 +13,7 @@
 <script>
 export default {
   name: "TrainSelectComponent",
-  props:{
-    event:{
-      type:Object
-    }
-  },
+  props: ['value'],
   beforeMount() {
     let trains = this.$store.getters["TrainModule/getItems"];
     if(Array.isArray(trains) && trains.length===0){
@@ -25,26 +22,22 @@ export default {
   },
   computed:{
     options(){
-      let trains = this.$store.getters["TrainModule/getItems"]["hydra:member"],trainNumber;
+      let trains = this.$store.getters["TrainModule/getItems"]["hydra:member"];
       if(Array.isArray(trains)){
-        return trains.map(function (t){
-          return { text:t.trainNumber, value:t['@id'] }
-        });
+        return trains.map(function (t){return { text:t.trainNumber, value:t['@id'] }});
       }
-      return  trainNumber;
+      return  trains;
     },
-    train:{
+    selectedTrain:{
       get:function (){
-        let event = this.event;
-        if(event !== null){
-          if( typeof event ==='object'&& event.hasOwnProperty('train') && event.train !== null ){
-            if(event.train.hasOwnProperty('@id')) return  event.train['@id']
-          }
-          return undefined;
+        let train = this.value;
+        if(train !==null && typeof train ==='object' && train.hasOwnProperty('@id')){
+          return train['@id']
         }
+          return train;
       },
       set:function (newValue) {
-        this.event.train = newValue
+        if(newValue!==undefined) this.$store.commit("EventModule/setTrain",newValue);
       }
     },
   }

@@ -5,7 +5,7 @@
       <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
       <date-time/>
       <image-manager/>
-      <train-select :event="event"></train-select>
+      <train-select v-model="train"/>
       <category-select v-model="category"/>
       <train-fault v-model="selectedTrainFaults"/>
       <b-form-row>
@@ -60,6 +60,7 @@ export default {
       'event.title',
       'event.content',
       'event.category',
+        'event.train'
     ]),
     events() {
       return this.$store.getters["EventModule/getItems"]["hydra:member"];

@@ -5,8 +5,8 @@
       <content-input v-model="content" placeholder="Въведете текст на събитието..."/>
       <date-time/>
       <image-manager/>
-      <train-select v-model="train"/>
-      <category-select v-model="category"/>
+      <train-select v-model="trainSelect"/>
+      <category-select v-model="categorySelect"/>
       <train-fault v-model="selectedTrainFaults"/>
       <b-form-row>
         <div class="m-4">
@@ -42,10 +42,37 @@ export default {
     event() {
       return this.$store.getters["EventModule/getItem"];
     },
+    trainSelect:{
+      get:function (){
+        let train = this.event.train;
+        if(train !==null && typeof train ==='object' && train.hasOwnProperty('@id')){
+          this.$store.commit("EventModule/setTrain",train['@id']);
+          return train['@id']
+        }
+        return train;
+      },
+      set:function (newValue) {
+        this.$store.commit("EventModule/setTrain",newValue);
+      }
+    },
+    categorySelect: {
+      get: function () {
+        let selectedCategory = this.event.category;
+        if (selectedCategory !== null) {
+          if (typeof selectedCategory === 'object' && selectedCategory.hasOwnProperty('@id')) {
+            this.$store.commit("EventModule/setCategory", selectedCategory['@id']);
+            return selectedCategory['@id'];
+          }
+          return selectedCategory;
+        }
+      },
+      set: function (newValue) {
+        this.$store.commit("EventModule/setCategory", newValue);
+      }
+    },
     selectedTrainFaults: {
       get: function () {
         let selectedTrainFaults = this.$store.getters["EventModule/getSelectedTrainFaults"];
-
         if (Array.isArray(selectedTrainFaults) && selectedTrainFaults.filter(v => v['@id']).length > 0) {
           return selectedTrainFaults.map(v => v['@id'])
         }
@@ -59,8 +86,6 @@ export default {
     ...mapFields("EventModule", [
       'event.title',
       'event.content',
-      'event.category',
-        'event.train'
     ]),
     events() {
       return this.$store.getters["EventModule/getItems"]["hydra:member"];
